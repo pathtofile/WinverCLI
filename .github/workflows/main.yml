@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-2019
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Setup MsBuild
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Build Debug
+        run: msbuild.exe /nologo /m /t:Rebuild /p:Configuration=Debug winvercli.sln
+
+      - name: Build Release
+        run: msbuild.exe /nologo /m /t:Rebuild /p:Configuration=Release winvercli.sln
